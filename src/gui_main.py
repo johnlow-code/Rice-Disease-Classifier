@@ -119,7 +119,4 @@ infoButton.grid(row=0,column=5)
 stepLabel1.grid(row=2,column=0)
 importButton.grid()
 
-
-
-
 root.mainloop()
