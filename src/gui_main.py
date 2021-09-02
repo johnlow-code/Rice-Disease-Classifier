@@ -85,27 +85,20 @@ def analyse():
     ansLabel = Label(root, text="HISPA")
     ansLabel.pack()
 
-def clearall():
-    analyzeButton.grid_remove()
-    canvas.grid_remove()
-    clearButton.grid_remove()
-    stepLabel2.grid_remove()
-    stepLabel3.grid_remove()
-    resultLabel.grid_remove()
-    treatmentButton.grid_remove()
-    clearAllButton.grid_remove()
+
 
 def welcome():
-    clear()
     titleLabel1.grid(row=2,columnspan=3,column=2)
     titleLabel2.grid(row=3,columnspan=3,column=2)
-    infoButton.grid(row=1,column=4)
+    helpButton.grid(row=1,column=4)
     splash.grid(row=1,column=0,rowspan=7,columnspan=2)
     startButton.grid(row=5,columnspan=3,column=2)
 
 def help():
     clear()
     splash.grid(row=1,column=0,rowspan=7,columnspan=2)
+    helpBackButton.grid(row=1,column=4)
+
 
 
 
@@ -126,10 +119,12 @@ splash.create_image(20,20, anchor=NW, image=splashimage)
 importcanvas = tk.Canvas(root, width=250, height=455)
 titleLabel1 = tk.Label(root, text="Rice Disease \nClassifer", font=("Arial Bold",32))
 titleLabel2 = tk.Label(root, text='"Classifying Rice Diseases with Deep Learning"', font=("Arial",15),bg="black",fg="white")
-infoButton = tk.Button(root, text="?",font=("Arial Bold",24),padx=5,pady=5)
-tip.bind_widget(infoButton, balloonmsg="The program takes in your images and make predictions by passing it through the Machine Learning model we have trained.")
+helpButton = tk.Button(root, text="?",font=("Arial Bold",24),padx=5,pady=5,command=help)
+tip.bind_widget(helpButton, balloonmsg="The program takes in your images and make predictions by passing it through the Machine Learning model we have trained.")
 startButton = tk.Button(root, text="Get Started",font=(9), command=partial(open_select_source_image, importcanvas))
 
+helpLabel1 = tk.Label(root, text="What exactly is \nRice Disease \nClassifier? ", font=("Arial Bold",32))
+helpBackButton = tk.Button(root, text="<",font=("Arial Bold",24),padx=5,pady=5,command=welcome)
 
 
 stepLabel1 = tk.Label(root, text="1. Import the image", font=("Arial",24))
