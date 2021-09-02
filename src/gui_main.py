@@ -54,8 +54,8 @@ def open_select_source_image(canvas: tk.Canvas):
 
     global img
     img = ImageTk.PhotoImage(Image.open(filename))
-    canvas.create_image(20,20, anchor=NW, image=img)
-    canvas.grid(column=0, row=3, columnspan=5, rowspan=3, padx=PADDING, pady=PADDING, sticky="nsew")
+    importcanvas.create_image(20,20, anchor=NW, image=img)
+    importcanvas.grid(column=0, row=3, columnspan=5, rowspan=3, padx=PADDING, pady=PADDING, sticky="nsew")
     analyzeButton.grid(row=4,column=0)
     clearButton.grid(row=4,column=1)
 
@@ -95,14 +95,45 @@ def clearall():
     treatmentButton.grid_remove()
     clearAllButton.grid_remove()
 
+def welcome():
+    clear()
+    titleLabel1.grid(row=2,columnspan=3,column=2)
+    titleLabel2.grid(row=3,columnspan=3,column=2)
+    infoButton.grid(row=1,column=4)
+    splash.grid(row=1,column=0,rowspan=7,columnspan=2)
+    startButton.grid(row=5,columnspan=3,column=2)
+
+def help():
+    clear()
+    splash.grid(row=1,column=0,rowspan=7,columnspan=2)
+
+
+
+def clear():
+    for widgets in root.winfo_children():
+        widgets.destroy()
+
+# Frames 
+
+
+
 # Widgets and shits
-canvas = tk.Canvas(root, width=300, height=300)
-titleLabel1 = tk.Label(root, text="Rice Disease Classifer", font=("Arial Bold",32),bg="black",fg="white")
-titleLabel2 = tk.Label(root, text='"Classifying Rice Diseases with Deep Learning"', font=("Arial",15))
+
+# Welcome page
+splash = tk.Canvas(root, width=400, height=800)
+splashimage = ImageTk.PhotoImage(Image.open("src\splash.jpg"))
+splash.create_image(20,20, anchor=NW, image=splashimage)
+importcanvas = tk.Canvas(root, width=250, height=455)
+titleLabel1 = tk.Label(root, text="Rice Disease \nClassifer", font=("Arial Bold",32))
+titleLabel2 = tk.Label(root, text='"Classifying Rice Diseases with Deep Learning"', font=("Arial",15),bg="black",fg="white")
 infoButton = tk.Button(root, text="?",font=("Arial Bold",24),padx=5,pady=5)
 tip.bind_widget(infoButton, balloonmsg="The program takes in your images and make predictions by passing it through the Machine Learning model we have trained.")
+startButton = tk.Button(root, text="Get Started",font=(9), command=partial(open_select_source_image, importcanvas))
+
+
+
 stepLabel1 = tk.Label(root, text="1. Import the image", font=("Arial",24))
-importButton = tk.Button(root, text="Import Image(s)",font=(9), command=partial(open_select_source_image, canvas))
+importButton = tk.Button(root, text="Import Image(s)",font=(9), command=partial(open_select_source_image, importcanvas))
 tip.bind_widget(importButton, balloonmsg="The program only accepts JPED and PNG imports. Sorry!")
 clearButton = tk.Button(root, text="Clear Import", font=(9), command=clearimport)
 analyzeButton = tk.Button(root,text="Analyze", font = (9), command=fakeanalyse)
@@ -111,12 +142,8 @@ stepLabel3 = tk.Label(root, text="3. Results", font=("Arial",24))
 resultLabel = tk.Label(root, text="Detected: Healthy", font=("green",15))
 treatmentButton = tk.Button(root, text="Suggested Treatments",font = (9), command=openweb)
 tip.bind_widget(treatmentButton, balloonmsg="Redirects you to a website on treatment information.")
-clearAllButton = tk.Button(root, text="Retry",font = (9), command=clearall)
+clearAllButton = tk.Button(root, text="Retry",font = (9), command=clear)
 
-titleLabel1.grid(row=0,columnspan=5,column=0)
-titleLabel2.grid(row=1,columnspan=5,column=0)
-infoButton.grid(row=0,column=5)
-stepLabel1.grid(row=2,column=0)
-importButton.grid()
 
+welcome()
 root.mainloop()
