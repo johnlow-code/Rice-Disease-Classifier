@@ -25,7 +25,7 @@ WIN_TITLE = 'Rice Disease Classifier'
 
 root = tix.Tk()
 tip = tix.Balloon(root)
-root.iconbitmap("D:\John Low\Programming\Python\Rice Diseases\src\icon.ico")
+root.iconbitmap("src\icon.ico")
 root.geometry(f"{int(WIN_WIDTH*ZOOM_FACTOR)}x{int(WIN_HEIGHT*ZOOM_FACTOR)}")
 root.title(WIN_TITLE)
 root.minsize(WIN_WIDTH, WIN_HEIGHT)
