@@ -142,6 +142,5 @@ treatmentButton = tk.Button(root, text="Suggested Treatments",font = (9), comman
 tip.bind_widget(treatmentButton, balloonmsg="Redirects you to a website on treatment information.")
 retryButton = tk.Button(root, text="Retry",font = (9), command=lambda:[clear(),welcome()])
 
-
 welcome()
 root.mainloop()
