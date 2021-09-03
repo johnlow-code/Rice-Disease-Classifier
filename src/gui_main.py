@@ -7,6 +7,7 @@ import os
 from functools import partial
 from PIL import ImageTk, Image
 import webbrowser
+import time
 
 # Grid settings
 GRID_COL_NUM = 5
@@ -57,13 +58,6 @@ def open_select_source_image(canvas: tk.Canvas):
         clear()
         preview()
 
-def clearimport():
-    analyzeButton.grid_remove()
-    canvas.grid_remove()
-    clearButton.grid_remove()
-    
-
-
 def openweb():
     url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
     webbrowser.open(url,new=1)
@@ -92,19 +86,26 @@ def preview():
     img = ImageTk.PhotoImage(Image.open(filename))
     importcanvas.create_image(0,0,anchor=W, image=img)
     importcanvas.grid(column=0, row=3,columnspan=5, padx=PADDING, pady=PADDING, sticky="nsew")
-    analyzeButton.grid(row=4,column=1,columnspan=5)
+    analyseButton.grid(row=4,column=1,columnspan=5)
     changeButton.grid(row=4,column=1,columnspan=2)
 
 def analyse():
-    stepLabel2.grid(row=5,column=0)
-    stepLabel3.grid(row=6,column=0)
-    resultLabel.grid(row=7,column=0)
-    treatmentButton.grid(row=8,column=0)
-    clearAllButton.grid(row=8,column=1)
+    # ZS, the stepLabel2 doesnt show u p, idk why it cut straight to the result page llol
+    stepLabel1.grid_remove
+    stepLabel2.grid(row=2,column=0,columnspan=5)
+    analyseButton.grid_remove
+    changeButton.grid_remove
+    time.sleep(3)
+    results()
 
-# Frames 
-
-
+def results():
+    clear()
+    importcanvas.create_image(0,0,anchor=W, image=img)
+    importcanvas.grid(column=0, row=3,columnspan=5, padx=PADDING, pady=PADDING, sticky="nsew")
+    stepLabel3.grid(row=2,column=0,columnspan=5)
+    resultLabel.grid(row=4,column=0,columnspan=5)
+    treatmentButton.grid(row=5,column=1,columnspan=5)
+    retryButton.grid(row=5,column=1,columnspan=2)
 
 # Widgets and shits
 
@@ -129,16 +130,17 @@ stepLabel1 = tk.Label(root, text="Image Preview", font=("Arial",24))
 importButton = tk.Button(root, text="Import Image",font=(9), command=partial(open_select_source_image, importcanvas))
 tip.bind_widget(importButton, balloonmsg="The program only accepts JPED and PNG imports. Sorry!")
 changeButton = tk.Button(root, text="Change Image", font=(9), padx=5, command=partial(open_select_source_image, importcanvas))
-analyzeButton = tk.Button(root,text="Analyze", font = (9), padx=10, command=lambda:[clear(),analyse()])
+analyseButton = tk.Button(root,text="Analyze", font = (9), padx=10, command=analyse)
 
 # Analyse Page
+stepLabel2 = tk.Label(root, text="Processing the image. Please wait...", font=("Arial",24))
 
-stepLabel2 = tk.Label(root, text="2. Processing the image...", font=("Arial",24))
-stepLabel3 = tk.Label(root, text="3. Results", font=("Arial",24))
-resultLabel = tk.Label(root, text="Detected: Healthy", font=("green",15))
+# Results Page
+stepLabel3 = tk.Label(root, text="Results", font=("Arial",24))
+resultLabel = tk.Label(root, text="Detected: Healthy", font=("Green",15))
 treatmentButton = tk.Button(root, text="Suggested Treatments",font = (9), command=openweb)
 tip.bind_widget(treatmentButton, balloonmsg="Redirects you to a website on treatment information.")
-clearAllButton = tk.Button(root, text="Retry",font = (9), command=clear)
+retryButton = tk.Button(root, text="Retry",font = (9), command=lambda:[clear(),welcome()])
 
 
 welcome()
