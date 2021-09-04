@@ -27,6 +27,7 @@ WIN_TITLE = 'Rice Disease Classifier'
 root = tix.Tk()
 tip = tix.Balloon(root)
 root.iconbitmap("src\icon.ico")
+root.config(bg='#D9D8D7')
 root.geometry(f"{int(WIN_WIDTH*ZOOM_FACTOR)}x{int(WIN_HEIGHT*ZOOM_FACTOR)}")
 root.title(WIN_TITLE)
 root.minsize(WIN_WIDTH, WIN_HEIGHT)
@@ -68,12 +69,13 @@ def clear():
         widgets.grid_remove()
 
 def welcome():
+    #bg.grid(row=0,column=0)
     titleLabel1.grid(row=2,columnspan=3,column=2)
     titleLabel2.grid(row=3,columnspan=3,column=2)
     helpButton.grid(row=1,column=4)
     splash.grid(row=1,column=0,rowspan=7,columnspan=2)
     startButton.grid(row=5,columnspan=3,column=2)
-
+    
 def help():
     splash.grid(row=1,column=0,rowspan=7,columnspan=2)
     helpLabel1.grid(row=2,columnspan=3,column=2)
@@ -116,9 +118,11 @@ splash.create_image(20,20, anchor=NW, image=splashimage)
 importcanvas = tk.Canvas(root, width=400, height=400)
 titleLabel1 = tk.Label(root, text="Rice Disease \nClassifer", font=("Arial Bold",32))
 titleLabel2 = tk.Label(root, text='"Classifying Rice Diseases with Deep Learning"', font=("Arial",15),bg="black",fg="white")
-helpButton = tk.Button(root, text="?",font=("Arial Bold",24),padx=5,pady=5,command=lambda:[clear(),help()])
+helpButton = tk.Button(root, text="?",font=("Arial Bold",24),padx=5,pady=5,bg='#4abc69',fg='yellow',activebackground='green',activeforeground='white',command=lambda:[clear(),help()])
 tip.bind_widget(helpButton, balloonmsg="The program takes in your images and make predictions by passing it through the Machine Learning model we have trained.")
-startButton = tk.Button(root, text="Get Started",font=(9), padx=5,pady=5, command=partial(open_select_source_image, importcanvas))
+startButton = tk.Button(root, text="Get Started",font=(9), padx=5,pady=5, bg='#4abc69',fg='yellow',activebackground='green',activeforeground='white',command=partial(open_select_source_image, importcanvas))
+bg_image = ImageTk.PhotoImage(file=r"C:\Users\Shin\Documents\VS code\UMHackathon\Rice-Disease-Classifier\src\paddy-field.jpg")
+bg = tk.Label(root, image=bg_image, textvariable = "Welcome", font=("Arial Bold", 20),justify=CENTER, fg="blue")
 
 # Help page
 helpLabel1 = tk.Label(root, text="What exactly is \nRice Disease \nClassifier? ", font=("Arial Bold",32))
