@@ -8,6 +8,9 @@ from functools import partial
 from PIL import ImageTk, Image
 import webbrowser
 import time
+import random
+import tensorflow as tf
+from tensorflow import keras
 
 # Grid settings
 GRID_COL_NUM = 5
@@ -23,7 +26,6 @@ WIN_HEIGHT = int((E_HEIGHT + PADDING) * GRID_ROW_NUM + PADDING)
 WIN_TITLE = 'Rice Disease Classifier'
 
 # Root Settings
-
 root = tix.Tk()
 tip = tix.Balloon(root)
 root.iconbitmap("src\icon.ico")
@@ -40,6 +42,10 @@ for x in range(GRID_COL_NUM):
 for y in range(GRID_ROW_NUM):
     root.grid_rowconfigure(y, weight=1, minsize=E_HEIGHT)
 
+res = []
+for i in range (4):
+        res.append(random.random())
+        
 color_chart_win = None
 
 # Functions
@@ -74,21 +80,32 @@ def welcome():
     helpButton.grid(row=1,column=4)
     splash.grid(row=1,column=0,rowspan=7,columnspan=2)
     startButton.grid(row=5,columnspan=3,column=2)
-    
+       
 def help():
     splash.grid(row=1,column=0,rowspan=7,columnspan=2)
     helpLabel1.grid(row=2,columnspan=3,column=2)
     helpLabel2.grid(row=4,columnspan=3,column=2)
     helpBackButton.grid(row=1,column=4)
 
+def resize_image(image):
+    resized_img = image.resize((500,500))
+    resized_img = ImageTk.PhotoImage(resized_img)
+    return resized_img
+
+def show_image(image):
+    imgLabel = tk.Label(root, image=image)
+    imgLabel.grid(row=3, column=2)
+
 def preview():
     stepLabel1.grid(row=2,column=0,columnspan=5)
     global img
-    img = ImageTk.PhotoImage(Image.open(filename))
-    importcanvas.create_image(0,0,anchor=W, image=img)
-    importcanvas.grid(column=0, row=3,columnspan=5, padx=PADDING, pady=PADDING, sticky="nsew")
-    analyseButton.grid(row=4,column=1,columnspan=5)
-    changeButton.grid(row=4,column=1,columnspan=2)
+    img = Image.open(filename)
+    img = resize_image(img)
+    show_image(img)
+    # importcanvas.create_image(0,0,anchor="center", image=img)
+    # importcanvas.place(relx=0.5, rely=0.5, anchor="center")
+    analyseButton.grid(row=6,column=1,columnspan=5)
+    changeButton.grid(row=6,column=1,columnspan=2)
 
 def analyse():
     # ZS, the stepLabel2 doesnt show u p, idk why it cut straight to the result page llol
@@ -96,17 +113,23 @@ def analyse():
     stepLabel2.grid(row=2,column=0,columnspan=5)
     analyseButton.grid_remove
     changeButton.grid_remove
-    time.sleep(3)
+    # time.sleep(3)
     results()
 
 def results():
     clear()
-    importcanvas.create_image(0,0,anchor=W, image=img)
-    importcanvas.grid(column=0, row=3,columnspan=5, padx=PADDING, pady=PADDING, sticky="nsew")
+    show_image(img)
+    # importcanvas.create_image(0,0,anchor=W, image=img)
+    # importcanvas.grid(column=0, row=3,columnspan=5, padx=PADDING, pady=PADDING, sticky="nsew")
     stepLabel3.grid(row=2,column=0,columnspan=5)
     resultLabel.grid(row=4,column=0,columnspan=5)
-    treatmentButton.grid(row=5,column=1,columnspan=5)
+    treatmentButton.grid(row=5,column=2,columnspan=5)
     retryButton.grid(row=5,column=1,columnspan=2)
+
+def clear_result():
+    res = []
+    for i in range (4):
+        res.append(random.random())
 
 # Widgets and shits
 
@@ -137,12 +160,21 @@ stepLabel2 = tk.Label(root, text="Processing the image. Please wait...", font=("
 
 # Results Page
 stepLabel3 = tk.Label(root, text="Results", font=("Arial Bold",24), bg="#fcf3cf",fg="#8d6713")
-resultLabel = tk.Label(root, text="Detected: Healthy", font=("Green",15), bg="#fcf3cf",fg="Green")
+res_index = res.index(max(res))
+if (res_index == 0):
+    resultLabel = tk.Label(root, text="Detected: Brown Spot", font=("Brown",15), bg="#fcf3cf",fg="Brown")
+elif(res_index == 1):
+    resultLabel = tk.Label(root, text="Detected: Healthy", font=("Green",15), bg="#fcf3cf",fg="Green")
+elif(res_index == 2):
+    resultLabel = tk.Label(root, text="Detected: Hispa", font=("Red",15), bg="#fcf3cf",fg="Red")
+else:
+    resultLabel = tk.Label(root, text="Detected: Leaf Blast", font=("Yellow",15), bg="#fcf3cf",fg="Yellow")
+
 treatmentButton = tk.Button(root, text="Suggested Treatments",bg='#8d6713',fg='white',activebackground='white',activeforeground='#8d6713',font = (9), command=openweb)
 tip.bind_widget(treatmentButton, balloonmsg="Redirects you to a website on treatment information.")
-retryButton = tk.Button(root, text="Retry",font = (9),bg='#8d6713',fg='white',activebackground='white',activeforeground='#8d6713', command=lambda:[clear(),welcome()])
+retryButton = tk.Button(root, text="Retry",font = (9),bg='#8d6713',fg='white',activebackground='white',activeforeground='#8d6713', command=lambda:[clear(),welcome(),clear_result()])
 
-#Testing
+# model = tf.keras.models.load_model('src\rice_disease_classifer_v1_test_7728.model')
 
 welcome()
 root.mainloop()
