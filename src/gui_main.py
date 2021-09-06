@@ -11,6 +11,8 @@ import time
 import random
 import tensorflow as tf
 from tensorflow import keras
+from prediction_v1 import predict
+from numpy import round
 
 # Grid settings
 GRID_COL_NUM = 5
@@ -108,7 +110,10 @@ def preview():
     changeButton.grid(row=6,column=1,columnspan=2)
 
 def analyse():
-    # ZS, the stepLabel2 doesnt show u p, idk why it cut straight to the result page llol
+    probinlabel = predict(filename)
+    print(probinlabel)
+    global probpercentage
+    probpercentage=arrayPercentage(probinlabel)
     stepLabel1.grid_remove
     stepLabel2.grid(row=2,column=0,columnspan=5)
     analyseButton.grid_remove
@@ -121,10 +126,23 @@ def results():
     show_image(img)
     # importcanvas.create_image(0,0,anchor=W, image=img)
     # importcanvas.grid(column=0, row=3,columnspan=5, padx=PADDING, pady=PADDING, sticky="nsew")
+    summary = summariseProb(probpercentage)
+    pLabel = tk.Label(root, text=summary, font=(9))
+    pLabel.grid(row=4,column=0,columnspan=5,rowspan=4)
     stepLabel3.grid(row=2,column=0,columnspan=5)
-    resultLabel.grid(row=4,column=0,columnspan=5)
-    treatmentButton.grid(row=5,column=2,columnspan=5)
-    retryButton.grid(row=5,column=1,columnspan=2)
+    # resultLabel.grid(row=4,column=0,columnspan=5)
+    treatmentButton.grid(row=8,column=2,columnspan=5)
+    retryButton.grid(row=8,column=1,columnspan=2)
+
+def arrayPercentage(prob):
+    for i in range(len(prob[0])):
+        prob[0][i]=round((prob[0][i]*100),2)
+    return prob
+
+def summariseProb(prob):
+    summary = "Brown Spot: "+ str(prob[0][0]) + "%\nHispa: " + str(prob[0][1]) + "%\nHealthy: " + str(prob[0][2]) + "%\nLeaf Blast: "+ str(prob[0][3])+"%" 
+    
+    return summary
 
 def clear_result():
     res = []
@@ -160,6 +178,8 @@ stepLabel2 = tk.Label(root, text="Processing the image. Please wait...", font=("
 
 # Results Page
 stepLabel3 = tk.Label(root, text="Results", font=("Arial Bold",24), bg="#fcf3cf",fg="#8d6713")
+summary = ""
+
 res_index = res.index(max(res))
 if (res_index == 0):
     resultLabel = tk.Label(root, text="Detected: Brown Spot", font=("Brown",15), bg="#fcf3cf",fg="Brown")
