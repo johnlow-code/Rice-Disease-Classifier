@@ -154,7 +154,6 @@ def results():
     #     showlessButton.grid_remove()
     #     showmoreButton.grid(row=7,column=0,columnspan=5)
 
-
 def arrayPercentage(prob):
     for i in range(len(prob[0])):
         prob[0][i]=round((prob[0][i]*100),2)
@@ -210,19 +209,15 @@ stepLabel2 = tk.Label(root, text="Processing the image. Please wait...", font=("
 # Results Page
 stepLabel3 = tk.Label(root, text="Results", font=("Arial Bold",24), bg="#fcf3cf",fg="#8d6713")
 summary = ""
-
-res_index = res.index(max(res))
-if (res_index == 0):
-    resultLabel = tk.Label(root, text="Detected: Brown Spot", font=("Brown",15), bg="#fcf3cf",fg="Brown")
-elif(res_index == 1):
-    resultLabel = tk.Label(root, text="Detected: Healthy", font=("Green",15), bg="#fcf3cf",fg="Green")
-elif(res_index == 2):
-    resultLabel = tk.Label(root, text="Detected: Hispa", font=("Red",15), bg="#fcf3cf",fg="Red")
-else:
-    resultLabel = tk.Label(root, text="Detected: Leaf Blast", font=("Yellow",15), bg="#fcf3cf",fg="Yellow")
-
-
-
+# res_index = res.index(max(res))
+# if (res_index == 0):
+#     resultLabel = tk.Label(root, text="Detected: Brown Spot", font=("Brown",15), bg="#fcf3cf",fg="Brown")
+# elif(res_index == 1):
+#     resultLabel = tk.Label(root, text="Detected: Healthy", font=("Green",15), bg="#fcf3cf",fg="Green")
+# elif(res_index == 2):
+#     resultLabel = tk.Label(root, text="Detected: Hispa", font=("Red",15), bg="#fcf3cf",fg="Red")
+# else:
+#     resultLabel = tk.Label(root, text="Detected: Leaf Blast", font=("Yellow",15), bg="#fcf3cf",fg="Yellow")
 treatmentButton = tk.Button(root, text="Suggested Treatments",bg='#8d6713',fg='white',activebackground='white',activeforeground='#8d6713',font = (9), command=openweb)
 tip.bind_widget(treatmentButton, balloonmsg="Redirects you to a website on treatment information.")
 retryButton = tk.Button(root, text="Retry",font = (9),bg='#8d6713',fg='white',activebackground='white',activeforeground='#8d6713', command=lambda:[clear(),welcome(),clear_result()])
