@@ -29,7 +29,7 @@ WIN_TITLE = 'Rice Disease Classifier'
 # Root Settings
 root = tix.Tk()
 tip = tix.Balloon(root)
-root.iconbitmap("C:\\Users\JxH\PycharmProjects\Rice-Disease-Classifier\src\icon.ico")
+root.iconbitmap("src\icon.ico")
 root.geometry(f"{int(WIN_WIDTH * ZOOM_FACTOR)}x{int(WIN_HEIGHT * ZOOM_FACTOR)}")
 root.config(bg="#fcf3cf")
 root.title(WIN_TITLE)
@@ -211,7 +211,7 @@ def clear_result():
 
 # Welcome page
 splash = tk.Canvas(root, width=400, height=800)
-splashimage = ImageTk.PhotoImage(Image.open("C:\\Users\JxH\PycharmProjects\Rice-Disease-Classifier\src\splash.jpg"))
+splashimage = ImageTk.PhotoImage(Image.open("src\splash.jpg"))
 splash.create_image(20, 20, anchor=NW, image=splashimage)
 importcanvas = tk.Canvas(root, width=400, height=400)
 titleLabel1 = tk.Label(root, text="Rice Disease \nClassifer", font=("Arial Bold", 32), bg="#fcf3cf", fg="#8d6713")
