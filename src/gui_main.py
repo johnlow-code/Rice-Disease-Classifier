@@ -12,7 +12,7 @@ import random
 import tensorflow as tf
 from tensorflow import keras
 from prediction_v1 import predict
-from numpy import round
+from numpy import round,argmax
 
 # Grid settings
 GRID_COL_NUM = 5
@@ -80,6 +80,7 @@ def welcome():
     titleLabel1.grid(row=2, columnspan=3, column=2)
     titleLabel2.grid(row=3,columnspan=3,column=2)
     helpButton.grid(row=1,column=4)
+    howtoButton.grid(row=6,columnspan=3,column=2)
     splash.grid(row=1,column=0,rowspan=7,columnspan=2)
     startButton.grid(row=5,columnspan=3,column=2)
        
@@ -87,6 +88,12 @@ def help():
     splash.grid(row=1,column=0,rowspan=7,columnspan=2)
     helpLabel1.grid(row=2,columnspan=3,column=2)
     helpLabel2.grid(row=4,columnspan=3,column=2)
+    helpBackButton.grid(row=1,column=4)
+
+def howto():
+    splash.grid(row=1,column=0,rowspan=7,columnspan=2)
+    howtoLabel1.grid(row=2,columnspan=3,column=2)
+    howtoLabel2.grid(row=4,columnspan=3,column=2)
     helpBackButton.grid(row=1,column=4)
 
 def resize_image(image):
@@ -126,13 +133,26 @@ def results():
     show_image(img)
     # importcanvas.create_image(0,0,anchor=W, image=img)
     # importcanvas.grid(column=0, row=3,columnspan=5, padx=PADDING, pady=PADDING, sticky="nsew")
-    summary = summariseProb(probpercentage)
-    pLabel = tk.Label(root, text=summary, font=(9))
-    pLabel.grid(row=4,column=0,columnspan=5,rowspan=4)
+    resultsLabel = tk.Label(root, text="The rice plant "+findMax(probpercentage)+".",font =(9))
+    resultsLabel.grid(row=4,column=0,columnspan=5)
     stepLabel3.grid(row=2,column=0,columnspan=5)
     # resultLabel.grid(row=4,column=0,columnspan=5)
+    showmoreButton = tk.Button(root, text="Show more",bg='#8d6713',fg='white',activebackground='white',activeforeground='#8d6713',font = (9), command=lambda:[showmore(),showmoreButton.grid_remove(),resultsLabel.grid_remove()])
+    showmoreButton.grid(row=5,column=0,columnspan=5)
     treatmentButton.grid(row=8,column=2,columnspan=5)
     retryButton.grid(row=8,column=1,columnspan=2)
+    
+    def showmore():
+        summary = summariseProb(probpercentage)
+        pLabel = tk.Label(root, text=summary, font=(9))
+        pLabel.grid(row=4,column=0,columnspan=5,rowspan=3)
+        showlessButton = tk.Button(root, text="Show less",bg='#8d6713',fg='white',activebackground='white',activeforeground='#8d6713',font = (9), command=lambda:[pLabel.grid_remove(),
+            showlessButton.grid_remove(),showmoreButton.grid(row=5,column=0,columnspan=5),resultsLabel.grid(row=4,column=0,columnspan=5)])
+        showlessButton.grid(row=7,column=0,columnspan=5)
+    # def showless():
+    #     pLabel.grid_remove()
+    #     showlessButton.grid_remove()
+    #     showmoreButton.grid(row=7,column=0,columnspan=5)
 
 def arrayPercentage(prob):
     for i in range(len(prob[0])):
@@ -140,9 +160,13 @@ def arrayPercentage(prob):
     return prob
 
 def summariseProb(prob):
-    summary = "Brown Spot: "+ str(prob[0][0]) + "%\nHispa: " + str(prob[0][1]) + "%\nHealthy: " + str(prob[0][2]) + "%\nLeaf Blast: "+ str(prob[0][3])+"%" 
-    
+    summary = "Brown Spot: "+ str(prob[0][0]) + "%\nHealthy: " + str(prob[0][1]) + "%\nHispa: " + str(prob[0][2]) + "%\nLeaf Blast: "+ str(prob[0][3])+"%" 
     return summary
+
+def findMax(prob):
+    max_index = argmax(prob)
+    diseases = [ "most probably has Brown Spot","is most probably Healthy","most probably has Hispa","most probably has Leaf Blast"]
+    return diseases[max_index]
 
 def clear_result():
     res = []
@@ -158,9 +182,15 @@ splash.create_image(20,20, anchor=NW, image=splashimage)
 importcanvas = tk.Canvas(root, width=400, height=400)
 titleLabel1 = tk.Label(root, text="Rice Disease \nClassifer", font=("Arial Bold",32), bg="#fcf3cf",fg="#8d6713")
 titleLabel2 = tk.Label(root, text='"Classifying Rice Diseases with Deep Learning"', font=("Arial",15),bg="#fcf3cf",fg="#8d6713")
-helpButton = tk.Button(root, text="?",font=("Arial Bold",24),padx=5,pady=5,bg='#8d6713',fg='white',activebackground='white',activeforeground='#8d6713',command=lambda:[clear(),help()])
+helpButton = tk.Button(root, text="i",font=("Arial Bold",24),padx=5,pady=5,bg='#8d6713',fg='white',activebackground='white',activeforeground='#8d6713',command=lambda:[clear(),help()])
 tip.bind_widget(helpButton, balloonmsg="The program takes in your images and make predictions by passing it through the Machine Learning model we have trained.")
-startButton = tk.Button(root, text="Get Started",font=(9), padx=5,pady=5, bg='#8d6713',fg='white',activebackground='white',activeforeground='#8d6713',command=partial(open_select_source_image, importcanvas))
+startButton = tk.Button(root, text="Get Started",font=("Arial Bold",15), padx=5,pady=5, bg='#8d6713',fg='white',activebackground='white',activeforeground='#8d6713',command=partial(open_select_source_image, importcanvas))
+howtoButton = tk.Button(root, text="How to use",font=("Arial",15),padx=5,pady=5,bg='#8d6713',fg='white',activebackground='white',activeforeground='#8d6713',command=lambda:[clear(),howto()])
+
+# How to: page
+howtoLabel1 = tk.Label(root, text="How to use \nRice Disease \nClassifier? ", font=("Arial Bold",32), bg="#fcf3cf",fg="#8d6713")
+howtoLabel2 = tk.Label(root, text='1.Import the image \n2.Analyse \n3.View the result!', font=("Arial",18), bg="#fcf3cf",fg="#8d6713")
+
 # Help page
 helpLabel1 = tk.Label(root, text="What exactly is \nRice Disease \nClassifier? ", font=("Arial Bold",32), bg="#fcf3cf",fg="#8d6713")
 helpLabel2 = tk.Label(root, text='The program takes in your images and make predictions \nby passing it through the Machine Learning model \nwe have trained.', font=("Arial",12), bg="#fcf3cf",fg="#8d6713")
@@ -179,17 +209,15 @@ stepLabel2 = tk.Label(root, text="Processing the image. Please wait...", font=("
 # Results Page
 stepLabel3 = tk.Label(root, text="Results", font=("Arial Bold",24), bg="#fcf3cf",fg="#8d6713")
 summary = ""
-
-res_index = res.index(max(res))
-if (res_index == 0):
-    resultLabel = tk.Label(root, text="Detected: Brown Spot", font=("Brown",15), bg="#fcf3cf",fg="Brown")
-elif(res_index == 1):
-    resultLabel = tk.Label(root, text="Detected: Healthy", font=("Green",15), bg="#fcf3cf",fg="Green")
-elif(res_index == 2):
-    resultLabel = tk.Label(root, text="Detected: Hispa", font=("Red",15), bg="#fcf3cf",fg="Red")
-else:
-    resultLabel = tk.Label(root, text="Detected: Leaf Blast", font=("Yellow",15), bg="#fcf3cf",fg="Yellow")
-
+# res_index = res.index(max(res))
+# if (res_index == 0):
+#     resultLabel = tk.Label(root, text="Detected: Brown Spot", font=("Brown",15), bg="#fcf3cf",fg="Brown")
+# elif(res_index == 1):
+#     resultLabel = tk.Label(root, text="Detected: Healthy", font=("Green",15), bg="#fcf3cf",fg="Green")
+# elif(res_index == 2):
+#     resultLabel = tk.Label(root, text="Detected: Hispa", font=("Red",15), bg="#fcf3cf",fg="Red")
+# else:
+#     resultLabel = tk.Label(root, text="Detected: Leaf Blast", font=("Yellow",15), bg="#fcf3cf",fg="Yellow")
 treatmentButton = tk.Button(root, text="Suggested Treatments",bg='#8d6713',fg='white',activebackground='white',activeforeground='#8d6713',font = (9), command=openweb)
 tip.bind_widget(treatmentButton, balloonmsg="Redirects you to a website on treatment information.")
 retryButton = tk.Button(root, text="Retry",font = (9),bg='#8d6713',fg='white',activebackground='white',activeforeground='#8d6713', command=lambda:[clear(),welcome(),clear_result()])
