@@ -11,7 +11,7 @@ import time
 import random
 import tensorflow as tf
 from tensorflow import keras
-from prediction_v1 import predict
+from prediction import predict
 from numpy import round,argmax
 
 # Grid settings
@@ -117,10 +117,9 @@ def preview():
     changeButton.grid(row=6,column=1,columnspan=2)
 
 def analyse():
-    probinlabel = predict(filename)
-    print(probinlabel)
     global probpercentage
-    probpercentage=arrayPercentage(probinlabel)
+    probpercentage = predict(filename)
+    print(probpercentage)
     stepLabel1.grid_remove
     stepLabel2.grid(row=2,column=0,columnspan=5)
     analyseButton.grid_remove
@@ -154,19 +153,27 @@ def results():
     #     showlessButton.grid_remove()
     #     showmoreButton.grid(row=7,column=0,columnspan=5)
 
-def arrayPercentage(prob):
-    for i in range(len(prob[0])):
-        prob[0][i]=round((prob[0][i]*100),2)
-    return prob
+# def arrayPercentage(prob):
+#     for i in range(len(prob[0])):
+#         prob[0][i]=round((prob[0][i]*100),2)
+#     return prob
 
 def summariseProb(prob):
-    summary = "Brown Spot: "+ str(prob[0][0]) + "%\nHealthy: " + str(prob[0][1]) + "%\nHispa: " + str(prob[0][2]) + "%\nLeaf Blast: "+ str(prob[0][3])+"%" 
+    summary=""
+    for p in prob:
+        summary+= p[0]+": "+str(p[1])+"\n"
     return summary
 
 def findMax(prob):
-    max_index = argmax(prob)
-    diseases = [ "most probably has Brown Spot","is most probably Healthy","most probably has Hispa","most probably has Leaf Blast"]
-    return diseases[max_index]
+    disease = prob[0][0]
+    if disease=="BrownSpot":
+        return "most probably has Brown Spot"
+    elif disease=="Healthy":
+        return "is most probably Healthy"
+    elif disease=="Hispa":
+        return "most probably has Hispa"
+    elif disease=="LeafBlast":
+        return "most probably has Leaf Blast"
 
 def clear_result():
     res = []
