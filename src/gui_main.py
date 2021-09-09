@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import *
 from tkinter import tix
 from tkinter.constants import *
 from tkinter import filedialog
@@ -9,9 +8,6 @@ from PIL import ImageTk, Image
 import webbrowser
 import random
 from prediction import predict
-import numpy.random.common
-import numpy.random.bounded_integers
-import numpy.random.entropy
 
 # Grid settings
 GRID_COL_NUM = 5
@@ -27,9 +23,10 @@ WIN_HEIGHT = int((E_HEIGHT + PADDING) * GRID_ROW_NUM + PADDING)
 WIN_TITLE = 'Rice Disease Classifier'
 
 # Root Settings
+icon = "icon.ico"
 root = tix.Tk()
 tip = tix.Balloon(root)
-root.iconbitmap("src\icon.ico")
+root.iconbitmap(icon)
 root.geometry(f"{int(WIN_WIDTH * ZOOM_FACTOR)}x{int(WIN_HEIGHT * ZOOM_FACTOR)}")
 root.config(bg="#fcf3cf")
 root.title(WIN_TITLE)
@@ -66,6 +63,7 @@ def open_select_source_image(canvas: tk.Canvas):
     if len(filename) > 0:
         clear()
         preview()
+
 
 def clear():
     for widgets in root.winfo_children():
@@ -139,15 +137,16 @@ def results():
     resultsLabel.grid(row=4, column=0, columnspan=5)
     stepLabel3.grid(row=2, column=0, columnspan=5)
     # resultLabel.grid(row=4,column=0,columnspan=5)
-
-    showmoreButton = tk.Button(root, text="Show more",bg='#8d6713',fg='white',activebackground='white',activeforeground='#8d6713',font = (9), command=lambda:[showmore(),showmoreButton.grid_remove(),resultsLabel.grid_remove()])
-    showmoreButton.grid(row=5,column=0,columnspan=5)
+    showmoreButton = tk.Button(root, text="Show more", bg='#8d6713', fg='white', activebackground='white',
+                               activeforeground='#8d6713', font=(9),
+                               command=lambda: [showmore(), showmoreButton.grid_remove(), resultsLabel.grid_remove()])
+    showmoreButton.grid(row=5, column=0, columnspan=5)
     if disease == "Healthy":
         pass
     else:
-        treatmentButton.grid(row=8,column=2,columnspan=5)
-    retryButton.grid(row=8,column=1,columnspan=2)
-    
+        treatmentButton.grid(row=8, column=2, columnspan=5)
+    retryButton.grid(row=8, column=1, columnspan=2)
+
     def showmore():
         summary = summariseProb(probpercentage)
         pLabel = tk.Label(root, text=summary, font=(9))
@@ -176,12 +175,7 @@ def results():
 def summariseProb(prob):
     summary = ""
     for p in prob:
-        temptagname = p[0]
-        if temptagname == 'BrownSpot':
-            temptagname = 'Brown Spot'
-        elif temptagname == 'LeafBlast':
-            temptagname = 'Leaf Blast'
-        summary += temptagname + ": " + str(p[1]) + "%\n"
+        summary += p[0] + ": " + str(p[1]) + "\n"
     return summary
 
 
@@ -201,57 +195,61 @@ def findMax(prob):
 def openweb():
     # url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
     url = ""
-    if disease=="BrownSpot":
+    if disease == "BrownSpot":
         url = "http://www.knowledgebank.irri.org/training/fact-sheets/pest-management/diseases/item/brown-spot"
-    elif disease=="Healthy":
+    elif disease == "Healthy":
         pass
-    elif disease=="Hispa":
+    elif disease == "Hispa":
         url = "http://www.agritech.tnau.ac.in/expert_system/paddy/cppests_ricehispa.html"
-    elif disease=="LeafBlast":
+    elif disease == "LeafBlast":
         url = "https://www2.ipm.ucanr.edu/agriculture/rice/Rice-Blast/"
-    webbrowser.open(url,new=1)
+    webbrowser.open(url, new=1)
+
 
 def treatment():
-    if disease=="BrownSpot":
+    if disease == "BrownSpot":
         disease1.grid(row=0, column=0, columnspan=5)
         treatmentTitle.grid(row=1, column=0, columnspan=5)
         trtDisease1.grid(row=2, column=0, columnspan=7)
         preventionTitle.grid(row=5, column=0, columnspan=5)
         pvtDisease1.grid(row=6, column=0, columnspan=7)
-        linkButton = tk.Button(root, text="Click for more info",bg='#8d6713',fg='white',activebackground='white',activeforeground='#8d6713',font = (9), command=openweb)
+        linkButton = tk.Button(root, text="Click for more info", bg='#8d6713', fg='white', activebackground='white',
+                               activeforeground='#8d6713', font=(9), command=openweb)
         tip.bind_widget(linkButton, balloonmsg="Redirects you to a website on treatment information.")
-        linkButton.grid(row=8,column=2,columnspan=5)
-        retryButton.grid(row=8,column=1,columnspan=2)
-    elif disease=="Healthy":
+        linkButton.grid(row=8, column=2, columnspan=5)
+        retryButton.grid(row=8, column=1, columnspan=2)
+    elif disease == "Healthy":
         pass
-    elif disease=="Hispa":
+    elif disease == "Hispa":
         disease2.grid(row=0, column=0, columnspan=5)
         treatmentTitle.grid(row=1, column=0, columnspan=5)
         trtDisease2.grid(row=2, column=0, columnspan=7)
         preventionTitle.grid(row=5, column=0, columnspan=5)
         pvtDisease2.grid(row=6, column=0, columnspan=7)
-        linkButton = tk.Button(root, text="Click for more info",bg='#8d6713',fg='white',activebackground='white',activeforeground='#8d6713',font = (9), command=openweb)
+        linkButton = tk.Button(root, text="Click for more info", bg='#8d6713', fg='white', activebackground='white',
+                               activeforeground='#8d6713', font=(9), command=openweb)
         tip.bind_widget(linkButton, balloonmsg="Redirects you to a website on treatment information.")
-        linkButton.grid(row=8,column=2,columnspan=5)
-        retryButton.grid(row=8,column=1,columnspan=2)
-    elif disease=="LeafBlast":
+        linkButton.grid(row=8, column=2, columnspan=5)
+        retryButton.grid(row=8, column=1, columnspan=2)
+    elif disease == "LeafBlast":
         disease3.grid(row=0, column=0, columnspan=5)
         treatmentTitle.grid(row=1, column=0, columnspan=5)
         trtDisease3.grid(row=2, column=0, columnspan=7)
         preventionTitle.grid(row=5, column=0, columnspan=5)
         pvtDisease3.grid(row=6, column=0, columnspan=7)
-        linkButton = tk.Button(root, text="Click for more info",bg='#8d6713',fg='white',activebackground='white',activeforeground='#8d6713',font = (9), command=openweb)
+        linkButton = tk.Button(root, text="Click for more info", bg='#8d6713', fg='white', activebackground='white',
+                               activeforeground='#8d6713', font=(9), command=openweb)
         tip.bind_widget(linkButton, balloonmsg="Redirects you to a website on treatment information.")
-        linkButton.grid(row=8,column=2,columnspan=5)
-        retryButton.grid(row=8,column=1,columnspan=2)
-
+        linkButton.grid(row=8, column=2, columnspan=5)
+        retryButton.grid(row=8, column=1, columnspan=2)
 
 
 # Widgets and shits
 
 # Welcome page
 splash = tk.Canvas(root, width=400, height=800)
-splashimage = ImageTk.PhotoImage(Image.open("src\splash.jpg"))
+main_menu_img = 'splash.jpg'
+splashimage = ImageTk.PhotoImage(Image.open(main_menu_img))
 splash.create_image(20, 20, anchor=NW, image=splashimage)
 importcanvas = tk.Canvas(root, width=400, height=400)
 titleLabel1 = tk.Label(root, text="Rice Disease \nClassifer", font=("Arial Bold", 32), bg="#fcf3cf", fg="#8d6713")
@@ -300,26 +298,38 @@ stepLabel2 = tk.Label(root, text="Processing the image. Please wait...", font=("
 # Results Page
 stepLabel3 = tk.Label(root, text="Results", font=("Arial Bold", 24), bg="#fcf3cf", fg="#8d6713")
 summary = ""
-
-treatmentButton = tk.Button(root, text="Suggested Treatments",bg='#8d6713',fg='white',activebackground='white',activeforeground='#8d6713',font = (9), command=lambda:[clear(),treatment()])
+treatmentButton = tk.Button(root, text="Suggested Treatments", bg='#8d6713', fg='white', activebackground='white',
+                            activeforeground='#8d6713', font=(9), command=lambda: [clear(), treatment()])
 tip.bind_widget(treatmentButton, balloonmsg="Redirects you for more info.")
-retryButton = tk.Button(root, text="Retry",font = (9),bg='#8d6713',fg='white',activebackground='white',activeforeground='#8d6713', command=lambda:[clear(),welcome()])
+retryButton = tk.Button(root, text="Retry", font=(9), bg='#8d6713', fg='white', activebackground='white',
+                        activeforeground='#8d6713', command=lambda: [open_select_source_image(importcanvas)])
 
 # Treatment Page
-treatmentTitle = tk.Label(root, text="Treatment", font=("Arial Bold",32), bg="#fcf3cf",fg="#8d6713")
-preventionTitle = tk.Label(root, text="Prevention", font=("Arial Bold",32), bg="#fcf3cf",fg="#8d6713")
+treatmentTitle = tk.Label(root, text="Treatment", font=("Arial Bold", 20), bg="#fcf3cf", fg="#8d6713")
+preventionTitle = tk.Label(root, text="Prevention", font=("Arial Bold", 20), bg="#fcf3cf", fg="#8d6713")
 
-disease1 = tk.Label(root, text="Brown Spot", font=("Arial Bold",32), bg="#fcf3cf",fg="#8d6713")
-trtDisease1 = tk.Label(root, text='-Use resistant varieties.\n-Use fungicides (e.g., iprodione, propiconazole, azoxystrobin, trifloxystrobin, and carbendazim) as seed treatments.\n-Treat seeds with hot water (53−54°C) for 10−12 minutes before planting, to control primary infection at the seedling stage. \nTo increase effectiveness of treatment, pre-soak seeds in cold water for eight hours.\n', font=("Arial",12), bg="#fcf3cf",fg="#8d6713")
-pvtDisease1 = tk.Label(root, text='-Use resistant varieties. \n-Apply required fertilizers\n-Apply calcium silicate slag before planting', font=("Arial",12), bg="#fcf3cf",fg="#8d6713")
+disease1 = tk.Label(root, text="Brown Spot", font=("Arial Bold", 32), bg="#fcf3cf", fg="#8d6713")
+trtDisease1 = tk.Label(root,
+                       text='-Use resistant varieties.\n-Use fungicides (e.g., iprodione, propiconazole, azoxystrobin, trifloxystrobin, and carbendazim) as seed treatments.\n-Treat seeds with hot water (53−54°C) for 10−12 minutes before planting, to control primary infection at the seedling stage. \nTo increase effectiveness of treatment, pre-soak seeds in cold water for eight hours.\n',
+                       font=("Arial", 12), bg="#fcf3cf", fg="#8d6713")
+pvtDisease1 = tk.Label(root,
+                       text='-Use resistant varieties. \n-Apply required fertilizers\n-Apply calcium silicate slag before planting',
+                       font=("Arial", 12), bg="#fcf3cf", fg="#8d6713")
 
-disease2 = tk.Label(root, text="Hispa", font=("Arial Bold",32), bg="#fcf3cf",fg="#8d6713")
-trtDisease2 = tk.Label(root, text='-Spraying of methyl parathion 0.05percent or Quinalphos 0.05%\n-Spray neem based pesticide e.g. altineem @ 3ml per litre of water or crude neem seed oil.\n-Spray malathion 50percent EC @ 2ml per litre water when 1 adult or 1-2 damaged leaves per hill are seen', font=("Arial",12), bg="#fcf3cf",fg="#8d6713")
-pvtDisease2 = tk.Label(root, text='-Avoid over fertilizing the field.\n-Leaf tip containing blotch mines should be destroyed.\n-Manual collection and killing of beetles\n-Clipping and burying shoots in the mud', font=("Arial",12), bg="#fcf3cf",fg="#8d6713")
+disease2 = tk.Label(root, text="Hispa", font=("Arial Bold", 32), bg="#fcf3cf", fg="#8d6713")
+trtDisease2 = tk.Label(root,
+                       text='-Spraying of methyl parathion 0.05percent or Quinalphos 0.05%\n-Spray neem based pesticide e.g. altineem @ 3ml per litre of water or crude neem seed oil.\n-Spray malathion 50percent EC @ 2ml per litre water when 1 adult or 1-2 damaged leaves per hill are seen',
+                       font=("Arial", 12), bg="#fcf3cf", fg="#8d6713")
+pvtDisease2 = tk.Label(root,
+                       text='-Avoid over fertilizing the field.\n-Leaf tip containing blotch mines should be destroyed.\n-Manual collection and killing of beetles\n-Clipping and burying shoots in the mud',
+                       font=("Arial", 12), bg="#fcf3cf", fg="#8d6713")
 
-disease3 = tk.Label(root, text="Leaf Blast", font=("Arial Bold",32), bg="#fcf3cf",fg="#8d6713")
-trtDisease3 = tk.Label(root, text='-Applying fungicides at precise times of the plant’s development', font=("Arial",12), bg="#fcf3cf",fg="#8d6713")
-pvtDisease3 = tk.Label(root, text='-Keep rice fields flooded deeply with a continual flow of water\n-Plant only certified disease-free seed of rice blast resistant rice plants\n-Incorporate or roll the rice stubble soon after harvest to promote early decomposition.\n-Avoid excessive nitrogen application rates and apply no more than 30 pounds per acre of nitrogen per application at midseason.', font=("Arial",12), bg="#fcf3cf",fg="#8d6713")
+disease3 = tk.Label(root, text="Leaf Blast", font=("Arial Bold", 32), bg="#fcf3cf", fg="#8d6713")
+trtDisease3 = tk.Label(root, text='-Applying fungicides at precise times of the plant’s development',
+                       font=("Arial", 12), bg="#fcf3cf", fg="#8d6713")
+pvtDisease3 = tk.Label(root,
+                       text='-Keep rice fields flooded deeply with a continual flow of water\n-Plant only certified disease-free seed of rice blast resistant rice plants\n-Incorporate or roll the rice stubble soon after harvest to promote early decomposition.\n-Avoid excessive nitrogen application rates and apply no more than 30 pounds per acre of nitrogen per application at midseason.',
+                       font=("Arial", 12), bg="#fcf3cf", fg="#8d6713")
 
 welcome()
 root.mainloop()
