@@ -15,15 +15,15 @@ GRID_ROW_NUM = 10
 PADDING = 5
 # Widgets settings
 E_WIDTH = 140
-E_HEIGHT = 40
+E_HEIGHT = 55
 # Main windows settings
-ZOOM_FACTOR = 1.4
+ZOOM_FACTOR = 1.6
 WIN_WIDTH = int((E_WIDTH + PADDING) * GRID_COL_NUM + PADDING)
 WIN_HEIGHT = int((E_HEIGHT + PADDING) * GRID_ROW_NUM + PADDING)
 WIN_TITLE = 'Rice Disease Classifier'
 
 # Root Settings
-icon = "src\icon.ico"
+icon = "icon.ico"
 root = tix.Tk()
 tip = tix.Balloon(root)
 root.iconbitmap(icon)
@@ -201,8 +201,18 @@ def results():
 
 def summariseProb(prob):
     summary = ""
+    cnt = 0
     for p in prob:
-        summary += p[0] + ": " + str(p[1]) + "\n"
+        temp = p[0]
+        if temp == 'BrownSpot':
+            temp = 'Brown Spot'
+        elif temp == 'LeafBlast':
+            temp = 'Leaf Blast'
+        if cnt < len(prob) -1:
+            summary += temp + ": " + str(p[1]) + "%\n"
+            cnt+=1
+        else:
+            summary += temp + ": " + str(p[1]) + "%"
     return summary
 
 
@@ -282,7 +292,7 @@ def treatment():
 
 # Welcome page
 splash = tk.Canvas(root, width=400, height=800)
-main_menu_img = 'src\splash.jpg'
+main_menu_img = 'splash.jpg'
 splashimage = ImageTk.PhotoImage(Image.open(main_menu_img))
 splash.create_image(20, 20, anchor=NW, image=splashimage)
 importcanvas = tk.Canvas(root, width=400, height=400)
