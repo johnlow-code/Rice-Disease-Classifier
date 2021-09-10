@@ -23,7 +23,7 @@ WIN_HEIGHT = int((E_HEIGHT + PADDING) * GRID_ROW_NUM + PADDING)
 WIN_TITLE = 'Rice Disease Classifier'
 
 # Root Settings
-icon = "icon.ico"
+icon = "src\icon.ico"
 root = tix.Tk()
 tip = tix.Balloon(root)
 root.iconbitmap(icon)
@@ -115,6 +115,23 @@ def preview():
     analyseButton.grid(row=6, column=1, columnspan=5)
     changeButton.grid(row=6, column=1, columnspan=2)
 
+def change_select_source_image(canvas: tk.Canvas):
+    filetypes = (
+        ('Image file', '*.jpg;*.png'),
+    )
+    global filename
+    tempfilename = filename
+    filename = filedialog.askopenfilename(
+        title='Import source image',
+        initialdir=os.getcwd(),
+        filetypes=filetypes)
+
+    if len(filename) > 0:
+        clear()
+        preview()
+
+    else:
+        filename=tempfilename
 
 def analyse():
     global probpercentage
@@ -146,6 +163,7 @@ def results():
     else:
         treatmentButton.grid(row=8, column=2, columnspan=5)
     retryButton.grid(row=8, column=1, columnspan=2)
+    menuButton.grid(row=9,column=2,columnspan=2)    # BUTTON HERE
 
     def showmore():
         summary = summariseProb(probpercentage)
@@ -241,14 +259,15 @@ def treatment():
                                activeforeground='#8d6713', font=(9), command=openweb)
         tip.bind_widget(linkButton, balloonmsg="Redirects you to a website on treatment information.")
         linkButton.grid(row=8, column=2, columnspan=5)
-        retryButton.grid(row=8, column=1, columnspan=2)
+        resultsButton.grid(row=8, column=1, columnspan=2)   # BUTTON HERE
+        menuButton.grid(row=9,column=2,columnspan=3)    # BUTTON HERE
 
 
 # Widgets and shits
 
 # Welcome page
 splash = tk.Canvas(root, width=400, height=800)
-main_menu_img = 'splash.jpg'
+main_menu_img = 'src\splash.jpg'
 splashimage = ImageTk.PhotoImage(Image.open(main_menu_img))
 splash.create_image(20, 20, anchor=NW, image=splashimage)
 importcanvas = tk.Canvas(root, width=400, height=400)
@@ -287,7 +306,7 @@ importButton = tk.Button(root, text="Import Image", font=(9), bg='#8d6713', fg='
 tip.bind_widget(importButton, balloonmsg="The program only accepts JPED and PNG imports. Sorry!")
 changeButton = tk.Button(root, text="Change Image", font=(9), padx=5, bg='#8d6713', fg='white',
                          activebackground='white', activeforeground='#8d6713',
-                         command=partial(open_select_source_image, importcanvas))
+                         command=partial(change_select_source_image, importcanvas))
 analyseButton = tk.Button(root, text="Analyze", font=(9), padx=10, bg='#8d6713', fg='white', activebackground='white',
                           activeforeground='#8d6713', command=analyse)
 
@@ -303,6 +322,8 @@ treatmentButton = tk.Button(root, text="Suggested Treatments", bg='#8d6713', fg=
 tip.bind_widget(treatmentButton, balloonmsg="Redirects you for more info.")
 retryButton = tk.Button(root, text="Retry", font=(9), bg='#8d6713', fg='white', activebackground='white',
                         activeforeground='#8d6713', command=lambda: [open_select_source_image(importcanvas)])
+menuButton = tk.Button(root, text="Main Menu", font=(9), bg='#8d6713', fg='white', activebackground='white',
+                        activeforeground='#8d6713', command=lambda: [clear(),welcome()])
 
 # Treatment Page
 treatmentTitle = tk.Label(root, text="Treatment", font=("Arial Bold", 20), bg="#fcf3cf", fg="#8d6713")
@@ -330,6 +351,8 @@ trtDisease3 = tk.Label(root, text='-Applying fungicides at precise times of the 
 pvtDisease3 = tk.Label(root,
                        text='-Keep rice fields flooded deeply with a continual flow of water\n-Plant only certified disease-free seed of rice blast resistant rice plants\n-Incorporate or roll the rice stubble soon after harvest to promote early decomposition.\n-Avoid excessive nitrogen application rates and apply no more than 30 pounds per acre of nitrogen per application at midseason.',
                        font=("Arial", 12), bg="#fcf3cf", fg="#8d6713")
+resultsButton = tk.Button(root, text="Back to results", font=(9), bg='#8d6713', fg='white', activebackground='white',
+                        activeforeground='#8d6713', command=results)
 
 welcome()
 root.mainloop()
