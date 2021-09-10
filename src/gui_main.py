@@ -161,9 +161,9 @@ def results():
     if disease == "Healthy":
         pass
     else:
-        treatmentButton.grid(row=8, column=2, columnspan=5)
-    retryButton.grid(row=8, column=1, columnspan=2)
-    menuButton.grid(row=9,column=2,columnspan=2)    # BUTTON HERE
+        treatmentButton.grid(row=8, column=1, columnspan=4)
+    retryButton.grid(row=8, column=0, columnspan=3)
+    menuButton.grid(row=10,column=1,columnspan=3)    # BUTTON HERE
 
     def showmore():
         summary = summariseProb(probpercentage)
@@ -235,7 +235,8 @@ def treatment():
                                activeforeground='#8d6713', font=(9), command=openweb)
         tip.bind_widget(linkButton, balloonmsg="Redirects you to a website on treatment information.")
         linkButton.grid(row=8, column=2, columnspan=5)
-        retryButton.grid(row=8, column=1, columnspan=2)
+        resultsButton.grid(row=8, column=1, columnspan=2)   # BUTTON HERE
+        menuButton.grid(row=10 ,column=1,columnspan=3) 
     elif disease == "Healthy":
         pass
     elif disease == "Hispa":
@@ -248,7 +249,8 @@ def treatment():
                                activeforeground='#8d6713', font=(9), command=openweb)
         tip.bind_widget(linkButton, balloonmsg="Redirects you to a website on treatment information.")
         linkButton.grid(row=8, column=2, columnspan=5)
-        retryButton.grid(row=8, column=1, columnspan=2)
+        resultsButton.grid(row=8, column=1, columnspan=2)   # BUTTON HERE
+        menuButton.grid(row=10 ,column=1,columnspan=3) 
     elif disease == "LeafBlast":
         disease3.grid(row=0, column=0, columnspan=5)
         treatmentTitle.grid(row=1, column=0, columnspan=5)
@@ -260,7 +262,7 @@ def treatment():
         tip.bind_widget(linkButton, balloonmsg="Redirects you to a website on treatment information.")
         linkButton.grid(row=8, column=2, columnspan=5)
         resultsButton.grid(row=8, column=1, columnspan=2)   # BUTTON HERE
-        menuButton.grid(row=9,column=2,columnspan=3)    # BUTTON HERE
+        menuButton.grid(row=10 ,column=1,columnspan=3)    # BUTTON HERE
 
 
 # Widgets and shits
