@@ -150,7 +150,11 @@ def results():
     show_image(img)
     # importcanvas.create_image(0,0,anchor=W, image=img)
     # importcanvas.grid(column=0, row=3,columnspan=5, padx=PADDING, pady=PADDING, sticky="nsew")
-    resultsLabel = tk.Label(root, text="The rice plant " + findMax(probpercentage) + ".", font=(9))
+    res = findMax(probpercentage)
+    if disease == "Healthy":
+        resultsLabel = tk.Label(root, text="The rice plant " + res + ".", bg="#ffd580", fg="green", font=(9))
+    else:
+        resultsLabel = tk.Label(root, text="The rice plant " + res + ".", bg="#ffd580", fg="#ff4500", font=(9))
     resultsLabel.grid(row=4, column=0, columnspan=5)
     stepLabel3.grid(row=2, column=0, columnspan=5)
     # resultLabel.grid(row=4,column=0,columnspan=5)
@@ -161,13 +165,18 @@ def results():
     if disease == "Healthy":
         pass
     else:
-        treatmentButton.grid(row=8, column=1, columnspan=4)
-    retryButton.grid(row=8, column=0, columnspan=3)
-    menuButton.grid(row=10,column=1,columnspan=3)    # BUTTON HERE
+        treatmentButton.grid(row=10, column=0, columnspan=5)
+    retryButton.grid(row=8, column=0, columnspan=4)
+    menuButton.grid(row=8,column=1,columnspan=4)    
+    
+    emptyText.grid(row=12,column=0,columnspan=5)
 
     def showmore():
         summary = summariseProb(probpercentage)
-        pLabel = tk.Label(root, text=summary, font=(9))
+        if disease == "Healthy":
+            pLabel = tk.Label(root, text=summary,bg="#ffd580", fg="green", font=(9))
+        else:
+            pLabel = tk.Label(root, text=summary,bg="#ffd580", fg="#ff4500", font=(9))
         pLabel.grid(row=4, column=0, columnspan=5, rowspan=3)
         showlessButton = tk.Button(root, text="Show less", bg='#8d6713', fg='white', activebackground='white',
                                    activeforeground='#8d6713', font=(9), command=lambda: [pLabel.grid_remove(),
@@ -234,9 +243,11 @@ def treatment():
         linkButton = tk.Button(root, text="Click for more info", bg='#8d6713', fg='white', activebackground='white',
                                activeforeground='#8d6713', font=(9), command=openweb)
         tip.bind_widget(linkButton, balloonmsg="Redirects you to a website on treatment information.")
-        linkButton.grid(row=8, column=2, columnspan=5)
-        resultsButton.grid(row=8, column=1, columnspan=2)   # BUTTON HERE
-        menuButton.grid(row=10 ,column=1,columnspan=3) 
+        linkButton.grid(row=8, column=2, columnspan=4)
+        resultsButton.grid(row=8, column=1, columnspan=1)   
+        menuButton.grid(row=10 ,column=0, columnspan=5) 
+        emptyText.grid(row=12,column=0,columnspan=5)
+        
     elif disease == "Healthy":
         pass
     elif disease == "Hispa":
@@ -248,9 +259,10 @@ def treatment():
         linkButton = tk.Button(root, text="Click for more info", bg='#8d6713', fg='white', activebackground='white',
                                activeforeground='#8d6713', font=(9), command=openweb)
         tip.bind_widget(linkButton, balloonmsg="Redirects you to a website on treatment information.")
-        linkButton.grid(row=8, column=2, columnspan=5)
-        resultsButton.grid(row=8, column=1, columnspan=2)   # BUTTON HERE
-        menuButton.grid(row=10 ,column=1,columnspan=3) 
+        linkButton.grid(row=8, column=2, columnspan=4)
+        resultsButton.grid(row=8, column=1, columnspan=1)   
+        menuButton.grid(row=10 ,column=0, columnspan=5) 
+        emptyText.grid(row=12,column=0,columnspan=5)
     elif disease == "LeafBlast":
         disease3.grid(row=0, column=0, columnspan=5)
         treatmentTitle.grid(row=1, column=0, columnspan=5)
@@ -260,9 +272,10 @@ def treatment():
         linkButton = tk.Button(root, text="Click for more info", bg='#8d6713', fg='white', activebackground='white',
                                activeforeground='#8d6713', font=(9), command=openweb)
         tip.bind_widget(linkButton, balloonmsg="Redirects you to a website on treatment information.")
-        linkButton.grid(row=8, column=2, columnspan=5)
-        resultsButton.grid(row=8, column=1, columnspan=2)   # BUTTON HERE
-        menuButton.grid(row=10 ,column=1,columnspan=3)    # BUTTON HERE
+        linkButton.grid(row=8, column=2, columnspan=4)
+        resultsButton.grid(row=8, column=1, columnspan=1)   
+        menuButton.grid(row=10 ,column=0, columnspan=5) 
+        emptyText.grid(row=12,column=0,columnspan=5)
 
 
 # Widgets and shits
@@ -355,6 +368,8 @@ pvtDisease3 = tk.Label(root,
                        font=("Arial", 12), bg="#fcf3cf", fg="#8d6713")
 resultsButton = tk.Button(root, text="Back to results", font=(9), bg='#8d6713', fg='white', activebackground='white',
                         activeforeground='#8d6713', command=results)
+
+emptyText = tk.Label(root, text="", font=("Arial Bold", 32), bg="#fcf3cf", fg="#fcf3cf")
 
 welcome()
 root.mainloop()
