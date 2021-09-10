@@ -135,8 +135,8 @@ def change_select_source_image(canvas: tk.Canvas):
 
 def analyse():
     global probpercentage
-    # probpercentage = predict(filename)
-    probpercentage = [['Healthy',0.90],['LeafBlast',0.05],['BrownSpot',0.03],['Hispa',0.02]]
+    probpercentage = predict(filename)
+    # probpercentage = [['Healthy',0.90],['LeafBlast',0.05],['BrownSpot',0.03],['Hispa',0.02]]
     print(probpercentage)
     stepLabel1.grid_remove
     stepLabel2.grid(row=2, column=0, columnspan=5)
