@@ -1,5 +1,9 @@
 from azure.cognitiveservices.vision.customvision.prediction import CustomVisionPredictionClient
 from msrest.authentication import ApiKeyCredentials
+import numpy
+import numpy.random.common
+import numpy.random.bounded_integers
+import numpy.random.entropy
 import matplotlib.pyplot as plt
 from numpy import round
 
